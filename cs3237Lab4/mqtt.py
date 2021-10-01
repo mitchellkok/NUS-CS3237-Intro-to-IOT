@@ -5,6 +5,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("hello/#")
 
 def on_message(client, userdata, msg):
+    msg.payload = msg.payload.decode("utf-8")
     print(msg.topic + " " + str(msg.payload))
 
 client = mqtt.Client()
