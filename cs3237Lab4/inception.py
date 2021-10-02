@@ -108,7 +108,7 @@ def train(model_file, train_path, validation_path, num_hidden=200, num_classes=5
     model.compile(optimizer=SGD(lr=0.00001, momentum=0.9), loss='categorical_crossentropy')
 
 def main():
-    train(MODEL_FILE, train_path="flower_photos", validation_path="flower_photos", steps=120, num_epochs=10)
+    train(MODEL_FILE, train_path="flower_photos", validation_path="flower_photos", steps=114, num_epochs=10)
 
 if __name__ == "__main__":
     main()

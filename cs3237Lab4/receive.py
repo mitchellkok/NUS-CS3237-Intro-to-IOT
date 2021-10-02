@@ -3,7 +3,20 @@ import paho.mqtt.client as mqtt
 import numpy as np
 import json
 
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from tensorflow.python.keras.backend import set_session
+
 classes = ["daisy", "danadelion", "roses", "sunflowers", "tulips"]
+dict={0:'daisy', 1:'dandelion', 2:'roses', 3:'sunflowers', 4:'tulips'}
+
+MODEL_NAME = "flowers.hd5"
+session = tf.compat.v1.Session(graph = tf.compat.v1.Graph())
+
+with session.graph.as_default():
+    set_session(session)
+    model = load_model(MODEL_NAME)
+    session.run(tf.compat.v1.global_variables_initializer())
 
 def on_connect(client, userdata, flags, rc):
     if rc==0:
@@ -14,9 +27,16 @@ def on_connect(client, userdata, flags, rc):
 
 def classify_flower(filename, data):
     print("Start classifying")
-    win = 4 
+
+    with session.graph.as_default():
+        set_session(session)
+        result = model.predict(data)
+        themax = np.argmax(result)
+
+    win = themax
+    score = result[0][themax]
     print("Done.")
-    return {"filename": filename, "prediction": classes[win], "score" : 0.99, "index": win}
+    return {"filename": filename, "prediction": classes[win], "score" : score, "index": win}
 
 def on_message(client, userdata, msg):
     # payload is in msg. we convert it back to a Python dictionary
@@ -33,6 +53,7 @@ def setup(hostname):
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
+
     client.connect(hostname)
     client.loop_start()
     return client

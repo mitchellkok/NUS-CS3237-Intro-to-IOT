@@ -35,7 +35,7 @@ def send_image(client, filename):
     img = load_image(filename)
     img_list = img.tolist()
     send_dict = {"filename":filename, "data":img_list}
-    client.publish("Group_B3/IMAGE/classivfy", json.dumps(send_dict))
+    client.publish("Group_B3/IMAGE/classify", json.dumps(send_dict))
 
 def main():
     client = setup("192.168.1.1")   # change based on IP address
