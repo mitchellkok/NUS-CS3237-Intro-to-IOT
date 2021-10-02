@@ -33,8 +33,8 @@ def classify_flower(filename, data):
         result = model.predict(data)
         themax = np.argmax(result)
 
-    win = themax
-    score = result[0][themax]
+    win = int(themax)
+    score = float(result[0][themax])
     print("Done.")
     return {"filename": filename, "prediction": classes[win], "score" : score, "index": win}
 
