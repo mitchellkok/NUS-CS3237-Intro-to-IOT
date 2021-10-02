@@ -2,6 +2,9 @@ import paho.mqtt.client as mqtt
 import numpy as np
 from PIL import Image
 import json
+from os import listdir
+
+samples = 'samples/'    # set up 'samples' relative path
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -41,7 +44,11 @@ def main():
     client = setup("192.168.1.1")   # change based on IP address
     print("Sending data.")
 
-    send_image(client, "tulip2.jpg")
+    for filename in listdir(samples):            # iterate through samples folder
+        # ensure only image files are sent
+        if filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            send_image(client, samples + filename)  # send image to receive.py
+
     print("Done, Waiting for results.")
 
     while True:

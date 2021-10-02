@@ -8,7 +8,6 @@ from tensorflow.keras.models import load_model
 from tensorflow.python.keras.backend import set_session
 
 classes = ["daisy", "danadelion", "roses", "sunflowers", "tulips"]
-dict={0:'daisy', 1:'dandelion', 2:'roses', 3:'sunflowers', 4:'tulips'}
 
 MODEL_NAME = "flowers.hd5"
 session = tf.compat.v1.Session(graph = tf.compat.v1.Graph())
@@ -28,14 +27,17 @@ def on_connect(client, userdata, flags, rc):
 def classify_flower(filename, data):
     print("Start classifying")
 
-    with session.graph.as_default():
-        set_session(session)
-        result = model.predict(data)
-        themax = np.argmax(result)
+    with session.graph.as_default():    # use session.graph.as_default to preserve graphs
+        set_session(session)            # set the tensorflow session
+        result = model.predict(data)    # predict class using model, based on data
+        themax = np.argmax(result)      # obtain the index of the largest value in result
 
+    # convert data into JSON serializable datatypes
     win = int(themax)
     score = float(result[0][themax])
     print("Done.")
+
+    # return prediction results
     return {"filename": filename, "prediction": classes[win], "score" : score, "index": win}
 
 def on_message(client, userdata, msg):
@@ -44,7 +46,7 @@ def on_message(client, userdata, msg):
 
     # recreate the data
     img_data = np.array(recv_dict["data"])
-    result = classify_flower(recv_dict["filename"], img_data)
+    result = classify_flower(recv_dict["filename"], img_data)   # classify data
 
     print("Sending results: ", result)
     client.publish("Group_B3/IMAGE/predict", json.dumps(result))
