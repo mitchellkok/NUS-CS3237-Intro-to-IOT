@@ -2,6 +2,9 @@ import paho.mqtt.client as mqtt
 import numpy as np
 from PIL import Image
 import json
+from os import listdir
+
+samples = 'samples/'    # set up 'samples' relative path
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -13,7 +16,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print("Received message from server.")
     resp_dict = json.loads(msg.payload)
-    print("Filename: %s, Prediction: %s Score: %3.4f" % (resp_dict["filename"], resp_dict["prediction"], resp_dict["score"]))
+    print("Filename: %s, Prediction: %s, Score: %3.4f" % (resp_dict["filename"], resp_dict["prediction"], resp_dict["score"]))
 
 def setup(hostname):
     print("here")
@@ -35,13 +38,17 @@ def send_image(client, filename):
     img = load_image(filename)
     img_list = img.tolist()
     send_dict = {"filename":filename, "data":img_list}
-    client.publish("Group_B3/IMAGE/classivfy", json.dumps(send_dict))
+    client.publish("Group_B3/IMAGE/classify", json.dumps(send_dict))
 
 def main():
     client = setup("192.168.1.1")   # change based on IP address
     print("Sending data.")
 
-    send_image(client, "tulip2.jpg")
+    for filename in listdir(samples):            # iterate through samples folder
+        # ensure only image files are sent
+        if filename.endswith(".jpg") or filename.endswith(".jpeg"):
+            send_image(client, samples + filename)  # send image to receive.py
+
     print("Done, Waiting for results.")
 
     while True:
