@@ -9,10 +9,9 @@ import os.path
 
 MODEL_FILE = "flowers.hd5"
 
-# create a model if none exists. Freese all training except in
-# newly attached output layers. We can specify the number of nodes
-# in the hidden penultimate layer, and the number of output
-# categories.
+# Create a model if none exists. Freeze all training except in newly 
+# attached output layers. We can specify the number of nodes in the
+# hidden penultimate layer, and the number of output categories
 
 def create_model(num_hidden, num_classes):
     base_model = InceptionV3(include_top = False, weights = 'imagenet')
@@ -33,7 +32,7 @@ def create_model(num_hidden, num_classes):
     return model
 
 
-# load an existing model file, then sets only the last
+# Load an existing model file, then sets only the last
 # 3 layers (which we added) to trainable
 def load_existing(model_file):
     # load the model

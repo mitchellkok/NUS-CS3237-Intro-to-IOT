@@ -61,7 +61,7 @@ def setup(hostname):
     return client
 
 def main():
-    setup("192.168.1.1")    # edit according to IP address
+    setup("192.168.0.1")    # edit according to IP address
     while True:
         pass
 
