@@ -46,7 +46,7 @@ def main():
 
     for filename in listdir(samples):            # iterate through samples folder
         try: 
-            Image.verify(img) # use Image.verify() from PIL Library
+            Image.verify(filename) # use Image.verify() from PIL Library
             send_image(client, samples + filename)  # send image
         except:
             pass
