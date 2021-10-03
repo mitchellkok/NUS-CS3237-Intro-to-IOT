@@ -45,9 +45,11 @@ def main():
     print("Sending data.")
 
     for filename in listdir(samples):            # iterate through samples folder
-        # ensure only image files are sent
-        if filename.endswith(".jpg") or filename.endswith(".jpeg"):
-            send_image(client, samples + filename)  # send image to receive.py
+        try: 
+            Image.verify(img) # use Image.verify() from PIL Library
+            send_image(client, samples + filename)  # send image
+        except:
+            pass
 
     print("Done, Waiting for results.")
 
