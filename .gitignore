@@ -1,3 +1,10 @@
 venv/
 cs3237Lab4/venv/
+cs3237Lab6/components
 
+*.pdf
+*.pptx
+*.png
+*.zip
+*.hex
+*.exe

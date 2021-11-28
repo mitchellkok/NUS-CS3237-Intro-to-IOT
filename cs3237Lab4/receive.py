@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.python.keras.backend import set_session
 
-classes = ["daisy", "danadelion", "roses", "sunflowers", "tulips"]
+classes = ["daisy", "dandelion", "roses", "sunflowers", "tulips"]
 
 MODEL_NAME = "flowers.hd5"
 session = tf.compat.v1.Session(graph = tf.compat.v1.Graph())
@@ -61,7 +61,7 @@ def setup(hostname):
     return client
 
 def main():
-    setup("192.168.1.1")    # edit according to IP address
+    setup("192.168.0.1")    # edit according to IP address
     while True:
         pass
 
